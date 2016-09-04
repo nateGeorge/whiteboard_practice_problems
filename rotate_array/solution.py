@@ -9,3 +9,6 @@ def rot(arr, st):
     fst = arr[-st:]
     lst = arr[:-st]
     return fst + lst
+
+# time complexity: O(1)
+# space complexity: O(1)
