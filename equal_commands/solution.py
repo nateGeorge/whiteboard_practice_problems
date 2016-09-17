@@ -39,6 +39,8 @@ def make_synDict_adv(syns):
             ans[w2] = ans.setdefault(w2, set()).union(set([w1])).union(ans[w1])
             ans[w1] = ans.setdefault(w1, set()).union(set([w2]))
         elif w2 in ans:
+            for w in ans[w1]:
+                ans[w] = ans[w].union([w1])
             ans[w1] = ans.setdefault(w1, set()).union(set([w2])).union(ans[w2])
             ans[w2] = ans.setdefault(w2, set()).union(set([w1]))
         else:
