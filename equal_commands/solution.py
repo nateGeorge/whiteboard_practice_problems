@@ -29,28 +29,38 @@ def check_equal(cmds, syns):
         ans.append(eq)
     return ans
 
-# more advanced answer
-def make_synDict_adv(syns):
-    ans = {}
-    for w1, w2 in syns:
-        if w1 in ans:
-            for w in ans[w1]:
-                ans[w] = ans[w].union([w2])
-            ans[w2] = ans.setdefault(w2, set()).union(set([w1])).union(ans[w1])
-            ans[w1] = ans.setdefault(w1, set()).union(set([w2]))
-        elif w2 in ans:
-            for w in ans[w1]:
-                ans[w] = ans[w].union([w1])
-            ans[w1] = ans.setdefault(w1, set()).union(set([w2])).union(ans[w2])
-            ans[w2] = ans.setdefault(w2, set()).union(set([w1]))
-        else:
-            ans[w1] = ans.setdefault(w1, set()).union(set([w2]))
-            ans[w2] = ans.setdefault(w2, set()).union(set([w1]))
-    #for w in ans:
-    #    for ew in ans[w]:
-    #        if ew in ans:
-    #            ans[ew] = ans[ew].union(set([w]))
-    return ans
+# more advanced answer -- thanks to Erich Wellinger
+def make_trans_syn_dict(syn_list):
+    def _make_syn_dict(syn_list):
+        d = defaultdict(set)
+        for w1, w2 in syns:
+            d[w1].add(w2)
+            d[w2].add(w1)
+        return d
+
+    def _get_connected_component(graph, starting_node):
+        visited, seen = set(), {starting_node}
+        queue = [starting_node]
+        while queue:
+            node = queue.pop()
+            if node not in visited:
+                visited.add(node)
+                neighbors_to_add = graph[node].difference(seen)
+                queue.extend(neighbors_to_add)
+                seen.update(neighbors_to_add)
+        return visited
+
+    d = _make_syn_dict(syn_list)
+    nodes = set(d.keys())
+    trans_dict = {}
+
+    while nodes:
+        node = nodes.pop()
+        component = _get_connected_component(d, node)
+        for node in component:
+            trans_dict[node] = component.difference(node)
+        nodes = nodes.difference(component)
+    return trans_dict
 
 def check_equal_adv(cmds, syns):
     ans = []
