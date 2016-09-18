@@ -1,7 +1,7 @@
 class Node(object):
-    def __init__(self, value, nextN=None):
+    def __init__(self, value, next=None):
         self.value = value
-        self.next = nextN
+        self.next = next
 
 def reverse_list_nondestructive(head):
     new_head = None
@@ -10,11 +10,25 @@ def reverse_list_nondestructive(head):
         head = head.next
     return new_head
 
+# another implementation I made while practicing whiteboarding
+def rev_ll_nd2(head):
+    cur = Node(head.value, None)
+    while head.next:
+        cur = Node(head.next.value, cur)
+        head = head.next
+    return cur
+
 def reverse_list(head):
     new_head = None
     while head:
       head.next, head, new_head = new_head, head.next, head
     return new_head
+
+# another implementation from whiteboarding practice
+def rev_list2(head):
+    nxt = None
+    while head:
+        head.next, head, nxt = nxt, head.nxt, head
 
 # just helper functions for testing
 def make_test_list():
@@ -46,3 +60,16 @@ if __name__ == "__main__":
     print_list(dest_head)
     print('og linked list now reversed')
     print_list(head)
+
+    head2 = make_test_list()
+    nd_head2 = rev_ll_nd2(head2)
+    print('non destructive linked list reversal 2')
+    print_list(nd_head2)
+    print('og linked list still there')
+    print_list(head2)
+
+    dest_head2 = reverse_list(head2)
+    print('destructive linked list reversal 2')
+    print_list(dest_head2)
+    print('og linked list now reversed')
+    print_list(head2)
