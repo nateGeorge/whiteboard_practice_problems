@@ -30,10 +30,11 @@ def check_equal(cmds, syns):
     return ans
 
 # more advanced answer -- thanks to Erich Wellinger
+from collections import defaultdict
 def make_trans_syn_dict(syn_list):
     def _make_syn_dict(syn_list):
         d = defaultdict(set)
-        for w1, w2 in syns:
+        for w1, w2 in syn_list:
             d[w1].add(w2)
             d[w2].add(w1)
         return d
@@ -64,7 +65,7 @@ def make_trans_syn_dict(syn_list):
 
 def check_equal_adv(cmds, syns):
     ans = []
-    synDict = make_synDict_adv(syns)
+    synDict = make_trans_syn_dict(syns)
     for c1, c2 in cmds:
         eq = True
         if c1 == c2:
