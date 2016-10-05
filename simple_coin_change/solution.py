@@ -1,6 +1,6 @@
 def get_change(coins, amt):
     if not isinstance(coins, list):
-        raise ValueError("coins must be a list")
+        raise TypeError("coins must be a list")
 
     c_cnts = []
     for c in sorted(coins, reverse=True):
